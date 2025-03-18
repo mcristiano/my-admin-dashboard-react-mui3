@@ -1,16 +1,17 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './base/layout/Layout';
-import TaskList from './TaskList'; // Importe o componente TaskList
+import TaskList from './TaskList';
+import RoleList from './RoleList'; // Import the new RoleList component
 
 function App() {
   return (
     <Router>
       <Layout>
         <Routes>
-          {/* Rota para a listagem de tarefas */}
           <Route path="/tarefas-listagem" element={<TaskList />} />
-          {/* Adicione outras rotas conforme necessário */}
+          <Route path="/roles-listagem" element={<RoleList />} /> {/* Add route for RoleList */}
+          {/* Add other routes as needed */}
         </Routes>
       </Layout>
     </Router>

@@ -14,7 +14,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   };
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', p: 0 }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
 			
       <Sidebar open={sidebarOpen} />
 			

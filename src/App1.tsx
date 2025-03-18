@@ -1,6 +1,10 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import Layout from './base/layout/Layout';
+import TaskList from './app/task/TaskList';
+import RoleList from './app/role/RoleList';
+import Dashboard from './app/dashboard/Dashboard';
 
 const theme = createTheme({
   palette: {
@@ -20,10 +24,16 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Layout>
-        <h1>Welcome to Admin Dashboard</h1>
-        <p>Start customizing your dashboard content here.</p>
-      </Layout>
+      <Router>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/tarefas-listagem" element={<TaskList />} />
+            <Route path="/roles-listagem" element={<RoleList />} />
+            {/* Add other routes as needed */}
+          </Routes>
+        </Layout>
+      </Router>
     </ThemeProvider>
   );
 }

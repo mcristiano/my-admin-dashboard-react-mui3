@@ -34,7 +34,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
           aria-label="open drawer"
           onClick={onMenuClick}
           edge="start"
-          sx={{ mr: 2 }}					
+          sx={{ mr: 2 }}
         >
           <MenuIcon />
         </IconButton>

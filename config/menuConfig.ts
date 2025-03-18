@@ -10,15 +10,18 @@ import {
   Mail,
   List,
   PostAdd,
+  Security,
 } from '@mui/icons-material';
 import { MenuItem } from '../src/base/components/menu/types';
+import { NavigateFunction } from 'react-router-dom'; // Import NavigateFunction
 
-const getMenuItems = (): MenuItem[] => [
+const getMenuItems = (navigate?: NavigateFunction): MenuItem[] => [ // Accept navigate
   {
     id: 'dashboard',
     title: 'Dashboard',
     icon: Dashboard,
     badge: 3,
+    onClick: () => navigate && navigate('/'), // Use navigate to go to /
   },
   {
     id: 'users',
@@ -87,17 +90,36 @@ const getMenuItems = (): MenuItem[] => [
       {
         id: 'tarefas',
         title: 'Tarefas',
-        icon: List, // Ícone para a listagem de tarefas
+        icon: List,
         items: [
           {
             id: 'tarefas-listagem',
             title: 'Listagem',
             icon: List,
+            onClick: () => navigate && navigate('/tarefas-listagem'), // Navigate to /tarefas-listagem
           },
           {
             id: 'tarefas-cadastro',
             title: 'Cadastro',
-            icon: PostAdd, // Ícone para o cadastro de tarefas
+            icon: PostAdd,
+          },
+        ],
+      },
+      {
+        id: 'roles',
+        title: 'Roles',
+        icon: Security,
+        items: [
+          {
+            id: 'roles-listagem',
+            title: 'Listagem',
+            icon: List,
+            onClick: () => navigate && navigate('/roles-listagem'), // Navigate to /roles-listagem
+          },
+          {
+            id: 'roles-cadastro',
+            title: 'Cadastro',
+            icon: PostAdd,
           },
         ],
       },

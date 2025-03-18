@@ -1,61 +1,51 @@
 import React, { useState, useEffect } from 'react';
-    import { DataGrid, GridColDef } from '@mui/x-data-grid';
-    import Box from '@mui/material/Box';
+import { DataGrid, GridColDef, GridRowParams, GridSelectionModel } from '@mui/x-data-grid';
+import { db } from '../../services/db';
+import { EntityType } from '../../types/EntityType';
 
-    interface DataGridProps<T> {
-      fetchData: () => Promise<T[]>;
-      columns: { field: string; headerName: string }[];
+interface CustomDataGridProps<T extends EntityType> {
+  entityType: T;
+  columns: GridColDef[];
+  initialSelectedRowId?: string | number;
+}
+
+function CustomDataGrid<T extends EntityType>({ entityType, columns, initialSelectedRowId }: CustomDataGridProps<T>) {
+  const [rows, setRows] = useState<any[]>([]);
+  const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await db[entityType].getAll();
+      setRows(data);
+    };
+
+    fetchData();
+  }, [entityType]);
+
+  useEffect(() => {
+    if (initialSelectedRowId !== undefined) {
+      setSelectionModel([initialSelectedRowId]);
     }
+  }, [initialSelectedRowId]);
 
-    function CustomDataGrid<T extends { id: string | number }>({ fetchData, columns }: DataGridProps<T>) {
-      const [rows, setRows] = useState<T[]>([]);
-      const [loading, setLoading] = useState<boolean>(true);
-      const [error, setError] = useState<Error | null>(null);
+  const handleSelectionChange = (params: GridRowParams) => {
+    setSelectionModel(params.selectionModel);
+  };
 
-      useEffect(() => {
-        const loadData = async () => {
-          try {
-            const data = await fetchData();
-            setRows(data);
-          } catch (err: any) {
-            setError(err);
-          } finally {
-            setLoading(false);
-          }
-        };
+  return (
+    <div style={{ height: 400, width: '100%' }}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        pageSize={5}
+        rowsPerPageOptions={[5, 10, 20]}
+        checkboxSelection
+        disableSelectionOnClick
+        onRowClick={handleSelectionChange}
+        selectionModel={selectionModel}
+      />
+    </div>
+  );
+}
 
-        loadData();
-      }, [fetchData]);
-
-      const gridColumns: GridColDef[] = columns.map(col => ({
-        field: col.field,
-        headerName: col.headerName,
-        width: 150,
-      }));
-
-      if (loading) {
-        return <Box>Loading...</Box>; // Or a Material-UI CircularProgress
-      }
-
-      if (error) {
-        return <Box>Error: {error.message}</Box>; // Or a more user-friendly error message
-      }
-
-      return (
-        <Box sx={{ height: 400, width: '100%' }}>
-          <DataGrid
-            rows={rows}
-            columns={gridColumns}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 },
-              },
-            }}
-            pageSizeOptions={[5, 10]}
-            checkboxSelection
-          />
-        </Box>
-      );
-    }
-
-    export default CustomDataGrid;
+export default CustomDataGrid;
